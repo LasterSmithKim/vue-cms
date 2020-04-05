@@ -11,10 +11,10 @@
         <!-- 九宫格样式 改六宫格 -->
         <ul class="mui-table-view mui-grid-view mui-grid-9">
             <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-                <a href="#">
+                <router-link to="/home/newslist">
                     <img src="/images/menu1.png" alt="">
                     <div class="mui-media-body">新闻资讯</div>
-                </a>
+                </router-link>
             </li>
             <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
                 <a href="#">
@@ -64,7 +64,7 @@ export default {
     methods: {
         getLunbotu() {
             //获取轮播图数据的方法
-            this.$http.get("http://127.0.0.1:8000/lunbotu/").then(result => {
+            this.$http.get("lunbotu/").then(result => {
                 this.lunbotuList = result.body;
                 console.log(result.body);
             });

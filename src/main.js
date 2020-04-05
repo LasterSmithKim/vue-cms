@@ -9,16 +9,19 @@ Vue.use(VueRouter)
 import VueResource from 'vue-resource'
 // 2.2 安装vue-resource
 Vue.use(VueResource)
+// 设置请求根路径
+Vue.http.options.root = 'http://127.0.0.1:8000/'
 
 // 导入 MUI 样式
 import '../lib/mui/css/mui.css'
 import '../lib/mui/css/icons-extra.css'
 
 // 按需导入 Mint-UI 中的组件
-import { Header,Swipe, SwipeItem } from 'mint-ui';
+import { Header,Swipe, SwipeItem, Button } from 'mint-ui';
 Vue.component(Header.name, Header);
 Vue.component(Swipe.name, Swipe);
 Vue.component(SwipeItem.name, SwipeItem);
+Vue.component(Button.name, Button);
 
 // 1.3 导入自己的 router.js 路由模块
 import router from './router.js'

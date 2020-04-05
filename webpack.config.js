@@ -2,6 +2,7 @@ var path = require('path')
 //在内存中生成一份页面，同时自动打包好 bundle注入 页面底部
 var htmlWebpackPlugin = require('html-webpack-plugin')
 var VueLoaderPlugin = require('vue-loader/lib/plugin')
+var WebpackDevServer = require("webpack-dev-server");
 
 //当以命令行形式 运行 webpack 或 webpack-dev-server 的时候，工具会发现 并没有提供 要打包的 文件 入口和出口文件
 // 此时，它会检查项目根目录中的配置文件  并读取这个文件， 就难道了 配置对象 然后根据 这个对象 进行打包构建

@@ -6,9 +6,9 @@
 
         <!-- 中间的 路由 router-view 区域 -->
 
-        <transition>
+        <!-- <transition> -->
             <router-view></router-view>
-        </transition>
+        <!-- </transition> -->
 
         <!-- 底部 Tabbar 区域 -->
         <nav class="mui-bar mui-bar-tab">
