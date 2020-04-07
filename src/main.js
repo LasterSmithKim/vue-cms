@@ -11,6 +11,8 @@ import VueResource from 'vue-resource'
 Vue.use(VueResource)
 // 设置请求根路径
 Vue.http.options.root = 'http://127.0.0.1:8000/'
+// 设置全局 post 时候，表单数据格式的 组织形式
+Vue.http.options.emulateJSON = true;
 
 // 导入 MUI 样式
 import '../lib/mui/css/mui.css'

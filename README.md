@@ -68,3 +68,40 @@
 1. 为加载更多按钮，绑定点击事件 在事件中 请求 下一页的数据
 2. 点击加载更多 ，让 pageIndex++ ，然后重新调用 this.getComments() 方法重新获取新数据
 3. 为了防止新数据覆盖老数据，我们在 点击加载新数据时， 调用老数据的concat方法，进行拼接
+
+
+## 发表评论
+1. 把文本框做双向绑定
+2. 为发表按钮按钮绑定一个事件
+3. 效验评论是否为空
+4. 通过vue-resource 发送一个请求，把评论发送给服务器
+5. 重新刷新列表， 以查看最新评论
+
+
+## 改造图片分析 按钮为 路由连接 并 显示对应的组件页面
+## 绘制 图片列表 组件页面结构 并 美化样式
+1. 制作  顶部的滑动条
+2. 制作  底部的图片列表
+### 制作顶部滑动条的坑：
+1. 需要借助于  MUI 中的 tab-top-webview-main.html 
+2. 需要 slider 区域中的 mui-fullscreen 类 去除
+3. 滑动条无法正常触发滑动，通过检查官方文档，这是一个sj组件需要被初始化
+ + 1. 导入 mui.js
+ + 2. 调用官方提供的方式：
+ '''
+    mui('.mui-scroll-wrapper').scroll({
+	deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+    });
+ '''
+ 4. 我们在初始化 滑动条 的时候 ，导入了 mui.js 但是 控制台报错：Uncaught TypeError: 'caller', 'callee', and 'arguments' properties may not be accessed on strict mode functions or the arguments objects for calls to them
+ + 经过退出 ，可能是 mui.js 中使用了 caller callee arguments， 但是在 webpack 打包好的 bundle.js 中是默认启用 strict mode 的，所以冲突了，
+ + 解决方案： 1 把mui.js中的非严格模式的代码改掉； 方案2 . webpack 打包时候的 严格模式禁用
+ + 使用第二种方案： "babel-plugin-transform-remove-strict-mode": "0.0.2" 
+                .babelrc 中， plugins: "transform-remove-strict-mode"
+ 5. 刚进去图片分享页面的时候， 滑动条 无法正常工作 ，经过分析，发现如果要 初始化 滑动条，必须要等dom元素加载完毕，所以我们把 初始化 滑动条 的代码，放进 mounted 生命周期函数中
+ 6. 当 滑动条 调试完成以后，发现 tabbar 无法正常工作，这个时候 需要把每个 tabbar 按钮的样式 mui-tab-item 重新 该一下名字 mui-tab-item-sm，并 将涉及到 mui-tab-item 的 样式全部自定义 给 mui-tab-item-sm
+ 7. 获取所有分类，并渲染 所有分类
+
+### 制作图片列表区域
+ 1. 图片需要使用懒加载技术，我们可以使用 Mint-UI 提供现成的组件 ’lazy-load‘
+ 2. 渲染图片列表数据

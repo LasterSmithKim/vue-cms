@@ -1,0 +1,77 @@
+<template>
+    <div>
+        <!-- 顶部滑动条 区域 -->
+        <div
+            class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted"
+        >
+            <div class="mui-scroll">
+                <a
+                    :class="['mui-control-item', item.id == 1 ? 'mui-active' : '']"
+                    v-for="item in cates"
+                    :key="item.id"
+                >{{ item.name }}</a>
+            </div>
+        </div>
+    </div>
+</template>
+
+
+<script>
+import { Toast } from "mint-ui";
+// 1. 导入 mui js的文件
+import mui from "../../../lib/mui/js/mui.js";
+
+export default {
+    data() {
+        return {
+            cates: []
+        };
+    },
+    mounted() {
+        //生命周期钩子函数   DOM结构被渲染好并放到页面中的时候 初始化 mui scroll
+        // 如果要操作元素，最好在 mounted 里面 ，这个时候 dom 元素是最新的
+        // 2. 初始化 滑动控件
+        mui(".mui-scroll-wrapper").scroll({
+            deceleration: 0.0005, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+            scrollX: true
+        });
+    },
+    created() {
+        this.getAllCategory();
+    },
+    methods: {
+        getAllCategory() {
+            //获取图片分类
+            this.$http.get("imgcategory/1/").then(
+                result => {
+                    // console.log(result.body.sub_cat)
+                    // 手动拼接 一个 全部 分类的列表
+
+                    result.body.sub_cat.unshift({
+                        id: 1,
+                        add_time: "2020-04-07 13:10:59",
+                        name: "全部",
+                        category_type: 1,
+                        parent_category: null
+                    });
+                    this.cates = result.body.sub_cat;
+                },
+                err => {
+                    console.log(err.status);
+                    Toast("获取图片分类列表失败");
+                }
+            );
+        }
+    }
+};
+</script>
+
+
+<style lang="scss" scoped>
+* {
+    touch-action: pan-y;
+}
+.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{
+    border-bottom: none;
+}
+</style>
