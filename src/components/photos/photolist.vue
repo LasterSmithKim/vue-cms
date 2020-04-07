@@ -9,9 +9,21 @@
                     :class="['mui-control-item', item.id == 1 ? 'mui-active' : '']"
                     v-for="item in cates"
                     :key="item.id"
+                    @click="getPhotoListByCateId(item.id)"
                 >{{ item.name }}</a>
             </div>
         </div>
+
+        <!-- 图片列表 区域 -->
+        <ul class="photo-list">
+            <li v-for="item in list" :key="item.id">
+                <img v-lazy="item.img_url" />
+                <div class="info">
+                    <h1 class="info-title">{{item.title}}</h1>
+                    <div class="info-body">{{item.zhaiyao}}</div>
+                </div>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -24,7 +36,8 @@ import mui from "../../../lib/mui/js/mui.js";
 export default {
     data() {
         return {
-            cates: []
+            cates: [],
+            list: [] //图片列表的数组
         };
     },
     mounted() {
@@ -38,6 +51,7 @@ export default {
     },
     created() {
         this.getAllCategory();
+        this.getPhotoListByCateId(1); //默认进入页面，请求所有数据
     },
     methods: {
         getAllCategory() {
@@ -61,6 +75,27 @@ export default {
                     Toast("获取图片分类列表失败");
                 }
             );
+        },
+        getPhotoListByCateId(cateId) {
+            if (cateId == 1) {
+                this.$http.get("imgslist/").then(
+                    result => {
+                        this.list = result.body;
+                    },
+                    err => {
+                        console.log(err);
+                    }
+                );
+            } else {
+                this.$http.get("imgslist/?img_category=" + cateId).then(
+                    result => {
+                        this.list = result.body;
+                    },
+                    err => {
+                        console.log(err);
+                    }
+                );
+            }
         }
     }
 };
@@ -71,7 +106,46 @@ export default {
 * {
     touch-action: pan-y;
 }
-.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{
+.mui-segmented-control.mui-segmented-control-inverted
+    .mui-control-item.mui-active {
     border-bottom: none;
 }
+
+.photo-list {
+    list-style: none;
+    margin: 0;
+    padding: 8px;
+    padding-bottom: 0;
+    li {
+        margin-bottom: 10px;
+        background-color: #cccccc;
+        text-align: center;
+        box-shadow: 0 0 9px #999;
+        position: relative;
+        img {
+            width: 100%;
+            vertical-align: middle;
+        }
+        img[lazy="loading"] {
+            width: 40px;
+            height: 300px;
+            margin: auto;
+        }
+    }
+}
+.info {
+    color: azure;
+    text-align: left;
+    position: absolute;
+    bottom: 0px;
+    background-color: rgba(0, 0, 0, 0.4);
+    max-height: 100px;
+    .info-title {
+        font-size: 14px;
+    }
+    .info-body {
+        font-size: 13px;
+    }
+}
+
 </style>
