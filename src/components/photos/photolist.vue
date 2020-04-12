@@ -16,13 +16,13 @@
 
         <!-- 图片列表 区域 -->
         <ul class="photo-list">
-            <li v-for="item in list" :key="item.id">
+            <router-link v-for="item in list" :key="item.id" :to="'/home/photoinfo/'+ item.id" tag="li">
                 <img v-lazy="item.img_url" />
                 <div class="info">
                     <h1 class="info-title">{{item.title}}</h1>
                     <div class="info-body">{{item.zhaiyao}}</div>
                 </div>
-            </li>
+            </router-link>
         </ul>
     </div>
 </template>
@@ -77,8 +77,11 @@ export default {
             );
         },
         getPhotoListByCateId(cateId) {
-            if (cateId == 1) {
-                this.$http.get("imgslist/").then(
+            this.$http
+                .get(
+                    "imgslist/" + (cateId == 1 ? "" : "?img_category=" + cateId)
+                )
+                .then(
                     result => {
                         this.list = result.body;
                     },
@@ -86,16 +89,6 @@ export default {
                         console.log(err);
                     }
                 );
-            } else {
-                this.$http.get("imgslist/?img_category=" + cateId).then(
-                    result => {
-                        this.list = result.body;
-                    },
-                    err => {
-                        console.log(err);
-                    }
-                );
-            }
         }
     }
 };
@@ -147,5 +140,4 @@ export default {
         font-size: 13px;
     }
 }
-
 </style>

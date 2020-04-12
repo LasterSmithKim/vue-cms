@@ -18,6 +18,12 @@ Vue.http.options.emulateJSON = true;
 import '../lib/mui/css/mui.css'
 import '../lib/mui/css/icons-extra.css'
 
+
+// 安装图片预览插件
+import VuePreview from 'vue-preview'
+Vue.use(VuePreview)
+
+
 // 按需导入 Mint-UI 中的组件
 // import { Header,Swipe, SwipeItem, Button, Lazyload } from 'mint-ui';
 // Vue.component(Header.name, Header);

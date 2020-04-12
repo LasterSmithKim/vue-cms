@@ -105,3 +105,33 @@
 ### 制作图片列表区域
  1. 图片需要使用懒加载技术，我们可以使用 Mint-UI 提供现成的组件 ’lazy-load‘
  2. 渲染图片列表数据
+
+ ### 实现了 图片列表的 懒加载改造 和 样式美化
+
+ ## 实现点击图片跳转到 图片详情页面
+ 1. 在改造 li 成 router-link 的时候，使用 tag 标签，指定渲染为 哪种元素
+
+ ## 实现 图片详情页面的 布局 和 美化，同时 获取数据 渲染页面
+ 1. npm i vue-preview -S
+ 2. <div class="thumbs">
+            <vue-preview :slides="list" class="imgPrev" @close="handleClose"></vue-preview>
+            <!-- <img class="preview-img" v-for="(item, index) in list " :src="item.image" height="100" @click="$preview.open(index, list)" :key="item.image"> -->
+        </div>
+ 3. 绑定 list 数据
+ 4. .thumbs {
+    
+    /deep/ .my-gallery {
+        display: flex;
+        flex-wrap: wrap;
+        figure {
+            width: 30%;
+            margin: 2px;
+            img {
+                width: 100%;
+                height: 100px;
+            }
+        }
+    }
+    引用特定样式
+## 
+
