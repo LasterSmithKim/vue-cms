@@ -1,12 +1,7 @@
 <template>
     <div>
         <!-- 轮播图区域 -->
-        <mt-swipe :auto="4000">
-            <!-- 在组件中使用 v-for 循环，一定要使用key -->
-            <mt-swipe-item v-for="item in lunbotuList" :key="item.id">
-                <img :src="item.imgs" alt />
-            </mt-swipe-item>
-        </mt-swipe>
+        <swiper :lunbotuList="lunbotuList" :isfull=true></swiper>
 
         <!-- 九宫格样式 改六宫格 -->
         <ul class="mui-table-view mui-grid-view mui-grid-9">
@@ -23,10 +18,10 @@
                 </router-link>
             </li>
             <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-                <a href="#">
+                <router-link to="/home/goodslist">
                     <img src="/images/menu3.png" alt="">
                     <div class="mui-media-body">商品购买</div>
-                </a>
+                </router-link>
             </li>
             <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
                 <a href="#">
@@ -52,6 +47,8 @@
 
 
 <script>
+import swiper from '../subcomponents/swiper.vue'
+
 export default {
     data() {
         return {
@@ -69,31 +66,16 @@ export default {
                 // console.log(result.body);
             });
         }
+    },
+    components: {
+        swiper
     }
 };
 </script>
 
 
 <style lang="scss" scoped>
-.mint-swipe {
-    height: 200px;
-    .mint-swipe-item {
-        &:nth-child(1) {
-            background-color: aqua;
-        }
-        &:nth-child(2) {
-            background-color: blue;
-        }
-        &:nth-child(3) {
-            background-color: red;
-        }
 
-        img {
-            width: 100%;
-            height: 100%;
-        }
-    }
-}
 .mui-grid-view.mui-grid-9 {
     background-color: #fff;
     border: none;
