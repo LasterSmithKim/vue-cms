@@ -11,7 +11,8 @@ import VueResource from 'vue-resource'
 Vue.use(VueResource)
 // 设置请求根路径
 Vue.http.options.root = 'http://127.0.0.1:8000/'
-// Vue.http.options.root = 'http://192.168.43.26:8000//'
+// Vue.http.options.root = 'http://192.168.43.26:8000/'
+// Vue.http.options.root = 'http://192.168.1.148:8000/'
 // 设置全局 post 时候，表单数据格式的 组织形式
 Vue.http.options.emulateJSON = true;
 
