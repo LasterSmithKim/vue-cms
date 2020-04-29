@@ -22,8 +22,10 @@
 </template>
 
 <script>
+
 import { Toast } from "mint-ui";
 export default {
+    
     data() {
         return {
             pageIndex: 1, //默认展示第一页数据

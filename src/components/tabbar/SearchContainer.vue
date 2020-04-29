@@ -1,17 +1,14 @@
 <template>
     <div>
-        <h3>SearchContainer</h3>
+        <h3>搜索模块</h3>
     </div>
 </template>
 
 
 <script>
-export default {
-    
-}
+export default {};
 </script>
 
 
 <style lang="scss" scoped>
-    
 </style>

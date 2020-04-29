@@ -62,14 +62,15 @@
 <script>
 import swiper from "../subcomponents/swiper.vue";
 import numbox from "../subcomponents/goods_info_numbox.vue";
+import axios from "axios";
 export default {
     data() {
         return {
             id: this.$route.params.id, //将路由参数中的 id 挂载到 data 中，方便后期调用
             lunbotu: [], //轮播图的数据
-            goodsinfo: [], //
+            goodsinfo: {}, //
             ballFlag: false, //控制小球隐藏
-            selectedCount: 1, //保存用户选择的商品数量，默认1
+            selectedCount: 1 //保存用户选择的商品数量，默认1
         };
     },
     created() {
@@ -102,6 +103,28 @@ export default {
         },
         addToShopCar() {
             this.ballFlag = !this.ballFlag;
+            // { id:商品id， count:要购买的数量， price：商品的单价， selected：false }
+            // 拼接出一个，要保存到 store 中 car 数组里的 商品信息对象
+            // var goodsinfo = {
+            //     id: this.id,
+            //     count: this.selectedCount,
+            //     price: this.goodsinfo.sell_price,
+            //     selected: true
+            // };
+
+            // 直接把数据保存到数据中
+            axios
+                .post("http://127.0.0.1:8000/shopingcars/", {
+                    goods: this.id,
+                    nums: this.selectedCount,
+                })
+                .then(result => {
+                    console.log(result.data);
+                });
+
+            // 调用 store 中的  mutations 的 addToCar方法 并传递 goodsinfo 对象参数
+            this.$store.commit('addCarunms',this.selectedCount);
+           
         },
         beforeEnter(el) {
             el.style.transform = "translate(0, 0)";
@@ -116,24 +139,26 @@ export default {
             // 5.如何获取 el 的位置？ Element.getBoundingClientRect()
 
             // 获取小球在页面的位置
-            const ballPosition = this.$refs.ball.getBoundingClientRect()
+            const ballPosition = this.$refs.ball.getBoundingClientRect();
             // 获取徽标页面的位置
-            const badgePosition = document.getElementById('badge').getBoundingClientRect()
+            const badgePosition = document
+                .getElementById("badge")
+                .getBoundingClientRect();
             // 计算位移
             const xDist = badgePosition.left - ballPosition.left;
             const yDist = badgePosition.top - ballPosition.top;
 
             el.style.transform = `translate(${xDist}px, ${yDist}px)`;
-            el.style.transition = 'all 1s cubic-bezier(0.4, -0.3, 1.0, 0.68)';
-            done()
+            el.style.transition = "all 1s cubic-bezier(0.4, -0.3, 1.0, 0.68)";
+            done();
         },
         afterEnter(el) {
-            this.ballFlag = !this.ballFlag
+            this.ballFlag = !this.ballFlag;
         },
-        getSelectedCount(count){
+        getSelectedCount(count) {
             // 当子组件 把 选择的 数量传递到 父组件的时候，把选中的值 保存到 data 上的selectedCount中
-            this.selectedCount = count
-            console.log("父组件拿到的数量" + count)
+            this.selectedCount = count;
+            console.log("父组件拿到的数量" + count);
         }
     },
     components: {
