@@ -43,17 +43,23 @@ export default {
             axios
                 .patch(
                     "http://127.0.0.1:8000/shopingcars/" + this.goodsid + "/",
-                    { nums: this.$refs.numbox.value }
+                    { nums: this.$refs.numbox.value, select_change:this.select_change }
                 )
                 .then(result => {
                     // this.$store.commit('addCarunms',(result.data.nums - c));
-
+                    // console.log(result.data)
                     this.$store.commit('addCarunms',(result.data.nums - this.c));
                     this.c = result.data.nums;
+
+                    this.$emit('child-event','子组件发生数据变化')
+
+
+                    // console.log(this.c)
+                    // this.$emit('child-event',this.c)
                 });
         }
     },
-    props: ["initcount", "goodsid"]
+    props: ["initcount", "goodsid", "select_change"]
     // watch: {
     //     // 属性监听
     //     value: function(newVal, oldVal) {

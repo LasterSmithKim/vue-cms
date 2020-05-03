@@ -117,6 +117,7 @@ export default {
                 .post("http://127.0.0.1:8000/shopingcars/", {
                     goods: this.id,
                     nums: this.selectedCount,
+                    select_change: false,
                 })
                 .then(result => {
                     console.log(result.data);

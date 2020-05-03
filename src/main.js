@@ -41,9 +41,16 @@ Vue.use(Vuex)
 
 var store = new Vuex.Store({
     state: {
+        allcars: [], //所有的 购物车内的商品
         carnums : "",
     },
     mutations: {
+        updateToCar(state,goodsinfo){
+            state.allcars = [],
+            state.allcars.push(goodsinfo)
+        },
+
+
         addToCar(state, goodsinfo) {
 
             // car = goodsinfo
@@ -81,12 +88,8 @@ var store = new Vuex.Store({
     },
     getters: {  // this.$store.getters.***
         // 相当于 计算属性 也相当于 过滤器 filters
-        getAllCount(state) {
-            // var c = 0
-            // state.car.forEach(item => {
-            //     c += item.count
-            // })
-            // return c
+        getSonCount(state) {
+            return state.carnums
         }
     },
 })

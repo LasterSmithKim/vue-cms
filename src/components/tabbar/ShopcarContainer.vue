@@ -5,13 +5,21 @@
             <div class="mui-card" v-for="(item, i) in goodsList" :key="item.id">
                 <div class="mui-card-content">
                     <div class="mui-card-content-inner">
-                        <mt-switch></mt-switch>
+                        <mt-switch
+                            v-model="item.select_change"
+                            @change="selectedChanged(item.goods.id, item.select_change, item.nums)"
+                        ></mt-switch>
                         <img :src="item.goods.img_url" alt />
                         <div class="info">
                             <h1>{{ item.goods.title }}</h1>
                             <p>
                                 <span class="price">{{ item.goods.sell_price }}</span>
-                                <numberbox :initcount="item.nums" :goodsid="item.goods.id"></numberbox>
+                                <numberbox
+                                    @child-event='parentEvent'
+                                    :initcount="item.nums"
+                                    :goodsid="item.goods.id"
+                                    :select_change="item.select_change"
+                                ></numberbox>
                                 <a
                                     href="#"
                                     @click.prevent="deletegood(item.goods.id,i,item.nums)"
@@ -25,9 +33,19 @@
         <!-- 结算区域 -->
         <div class="mui-card">
             <div class="mui-card-content">
-                <div
-                    class="mui-card-content-inner"
-                >这是一个最简单的卡片视图控件；卡片视图常用来显示完整独立的一段信息，比如一篇文章的预览图、作者信息、点赞数量等</div>
+                <div class="mui-card-content-inner jiesuan">
+                    <div class="left">
+                        <p>总计（不含运费）</p>
+                        <p>
+                            已勾选商品
+                            <span class="red">{{ selectnums }}</span> 件， 总价
+                            <span class="red">￥{{ selecttall }}</span>
+                        </p>
+                    </div>
+                    <div>
+                        <mt-button type="danger">去结算</mt-button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -41,7 +59,10 @@ import numberbox from "../subcomponents/shopcar_numbox.vue";
 export default {
     data() {
         return {
-            goodsList: [] //购物车中所有商品的数据
+            goodsList: [], //购物车中所有商品的数据
+            data1: 1,
+            selectnums: 0,
+            selecttall: 0,
         };
     },
     components: {
@@ -49,17 +70,50 @@ export default {
     },
     created() {
         this.getshopingcar();
+        this.updateTall()
     },
+
     methods: {
         getshopingcar() {
-            axios.get("http://127.0.0.1:8000/shopingcars/").then(result => {
-                // console.log(result.data)
-                (this.goodsList = result.data),
-                    err => {
-                        console.log(err);
-                    };
-            });
+            axios.get("http://127.0.0.1:8000/shopingcars/").then(
+                result => {
+                    // console.log(result.data)
+                    this.goodsList = result.data;
+
+                },
+                err => {
+                    console.log(err);
+                }
+            );
         },
+        updateTall() {
+            axios.get("http://127.0.0.1:8000/shopingcars/").then(
+                result => {
+                    // console.log(result.data)
+                    // this.goodsList = result.data;
+                    // console.log(result.data)
+                    var n = 0
+                    var tall = 0
+                    result.data.forEach(element => {
+                        // console.log(element.select_change)
+                        // console.log(element.nums)
+                        // console.log(element.goods.sell_price)
+                        if (element.select_change == true){
+                            n = n + element.nums
+                            tall = tall + (element.nums * element.goods.sell_price)
+                        }
+                    });
+                    // console.log("数量" + n + "----" + "总价" + tall)
+                    this.selectnums = n
+                    this.selecttall = tall
+                },
+                err => {
+                    console.log(err);
+                }
+            );
+            // console.log("数据更新")
+        },
+
         deletegood(goodsid, index, nums) {
             // console.log(goodsid,nums)
             axios
@@ -67,9 +121,26 @@ export default {
                 .then(result => {
                     // console.log(result.data)
                     // this.goodsList = result.data
-                    this.goodsList.splice(index,1)
+                    this.goodsList.splice(index, 1);
                     this.$store.commit("addCarunms", -nums);
+                    this.updateTall()
                 });
+        },
+        selectedChanged(id, select_change, nums) {
+            //每当点击开关， 把最新的 开关状态 传递到 数据库中
+            // console.log(id + "---" + val)
+            axios
+                .patch("http://127.0.0.1:8000/shopingcars/" + id + "/", {
+                    select_change: select_change,
+                    nums:nums
+                })
+                .then(result => {
+                    // console.log(result.data);
+                    this.updateTall()
+                });
+        },
+        parentEvent(data){
+            this.updateTall()
         }
     }
 };
@@ -104,6 +175,16 @@ export default {
                 color: red;
                 font-weight: bold;
             }
+        }
+    }
+    .jiesuan {
+        display: flex; //左右
+        justify-content: space-between; //两边
+        align-items: center; //中间
+        .red {
+            color: red;
+            font-weight: 900;
+            font-size: 16px;
         }
     }
 }
